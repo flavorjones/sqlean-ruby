@@ -2,7 +2,6 @@
 
 require_relative "sqlean/version"
 
-module Sqlean
-  class Error < StandardError; end
-  # Your code goes here...
+# https://github.com/nalgeon/sqlean/blob/main/README.md
+module SQLean
 end

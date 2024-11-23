@@ -4,7 +4,7 @@ require_relative "lib/sqlean/version"
 
 Gem::Specification.new do |spec|
   spec.name = "sqlean"
-  spec.version = Sqlean::VERSION
+  spec.version = SQLean::VERSION
   spec.authors = ["Mike Dalessio"]
   spec.email = ["mike.dalessio@gmail.com"]
 
