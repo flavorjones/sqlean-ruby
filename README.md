@@ -1,28 +1,91 @@
-# Sqlean
+# SQLean Ruby
 
-TODO: Delete this and the text below, and describe your gem
+Precompiled [SQLean](https://github.com/nalgeon/sqlean) extensions for SQLite, packaged for the Ruby ecosystem. Compatible with SQLite3, Extralite, and any other sqlite-based library that exposes [`sqlite3_load_extension`](https://www.sqlite.org/c3ref/load_extension.html).
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sqlean`. To experiment with that code, run `bin/console` for an interactive prompt.
+
+## Usage
+
+Please read the upstream documentation at https://antonz.org/sqlean/ or https://github.com/nalgeon/sqlean for details on what is provided by the SQLean extensions.
+
+The available extensions are:
+
+- [SQLean::Crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
+- [SQLean::Define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
+- [SQLean::FileIO](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
+- [SQLean::Fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
+- [SQLean::IPAddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation (not supported on Windows)
+- [SQLean::Math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md): Math functions
+- [SQLean::Regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
+- [SQLean::Stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
+- [SQLean::Text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
+- [SQLean::Unicode](https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md): Unicode support
+- [SQLean::UUID](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
+- [SQLean::VSV](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
+
+
+### with SQLite3
+
+Extend a SQLite3 database with SQLean extensions:
+
+``` ruby
+require "sqlite3"
+require "sqlean"
+
+db = SQLite3::Database.new("path/to/db.sqlite")
+
+# when using sqlite3 gem < 2.4.0:
+db.load_extension(SQLean.extension_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.extension_path) # or load individual extensions
+
+# when using sqlite3 gem >= 2.4.0, this form is also available:
+db.load_extension(SQLean) # load every extension in SQLean
+db.load_extension(SQLean::Crypto) # or load individual extensions
+```
+
+### with SQLite3 in Rails
+
+When using SQLite3 v2.4.0+ and Rails 8.1.0+:
+
+``` yaml
+# config/database.yml
+
+development:
+  adapter: sqlite3
+  extensions:
+    - SQLean # load every extension in SQLean
+    - SQLean::Crypto # or load individual extensions
+```
+
+
+### with Extralite
+
+Extend an Extralite database with SQLean extensions:
+
+``` ruby
+require "extralite"
+require "sqlean"
+
+db = Extralite::Database.new("path/to/db.sqlite")
+
+db.load_extension(SQLean.extension_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.extension_path) # or load individual extensions
+```
+
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add sqlean
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install sqlean
 ```
 
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
@@ -30,14 +93,17 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
+
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/flavorjones/sqlean. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/flavorjones/sqlean/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/flavorjones/sqlean-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/flavorjones/sqlean-ruby/blob/main/CODE_OF_CONDUCT.md).
+
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
+
 ## Code of Conduct
 
-Everyone interacting in the Sqlean project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/flavorjones/sqlean/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the sqlean-ruby project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/flavorjones/sqlean-ruby/blob/main/CODE_OF_CONDUCT.md).
