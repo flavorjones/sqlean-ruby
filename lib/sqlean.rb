@@ -1,19 +1,27 @@
 # frozen_string_literal: true
 
 require_relative "sqlean/version"
+require_relative "sqlean/upstream"
 
 # https://github.com/nalgeon/sqlean/blob/main/README.md
 module SQLean
+  class UnsupportedPlatform < StandardError; end
+
+  GEM_NAME = "sqlean"
+  WINDOWS_PLATFORM_REGEX = /mingw|mswin/ # :nodoc:
+  LINUX_PLATFORM_REGEX = /linux/ # :nodoc:
+  DARWIN_PLATFORM_REGEX = /darwin/ # :nodoc:
+
   # Returns an absolute path to the SQLean bundle, containing all the SQLean extensions.
   def self.sqlite_extension_path
-    File.join(__dir__, "sqlean", "dist", "sqlean.so")
+    SQLean.file_path("sqlean")
   end
 
   # https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md
   module Crypto
     # Returns an absolute path to the SQLean crypto extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "crypto.so")
+      SQLean.file_path("crypto")
     end
   end
 
@@ -21,7 +29,7 @@ module SQLean
   module Define
     # Returns an absolute path to the SQLean define extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "define.so")
+      SQLean.file_path("define")
     end
   end
 
@@ -29,7 +37,7 @@ module SQLean
   module FileIO
     # Returns an absolute path to the SQLean fileio extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "fileio.so")
+      SQLean.file_path("fileio")
     end
   end
 
@@ -37,7 +45,7 @@ module SQLean
   module Fuzzy
     # Returns an absolute path to the SQLean fuzzy extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "fuzzy.so")
+      SQLean.file_path("fuzzy")
     end
   end
 
@@ -45,7 +53,7 @@ module SQLean
   module IPAddr
     # Returns an absolute path to the SQLean ipaddr extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "ipaddr.so")
+      SQLean.file_path("ipaddr")
     end
   end
 
@@ -53,7 +61,7 @@ module SQLean
   module Math
     # Returns an absolute path to the SQLean math extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "math.so")
+      SQLean.file_path("math")
     end
   end
 
@@ -61,7 +69,7 @@ module SQLean
   module Regexp
     # Returns an absolute path to the SQLean regexp extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "regexp.so")
+      SQLean.file_path("regexp")
     end
   end
 
@@ -69,7 +77,7 @@ module SQLean
   module Stats
     # Returns an absolute path to the SQLean stats extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "stats.so")
+      SQLean.file_path("stats")
     end
   end
 
@@ -77,7 +85,7 @@ module SQLean
   module Text
     # Returns an absolute path to the SQLean text extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "text.so")
+      SQLean.file_path("text")
     end
   end
 
@@ -85,7 +93,7 @@ module SQLean
   module Unicode
     # Returns an absolute path to the SQLean unicode extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "unicode.so")
+      SQLean.file_path("unicode")
     end
   end
 
@@ -93,7 +101,7 @@ module SQLean
   module UUID
     # Returns an absolute path to the SQLean uuid extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "uuid.so")
+      SQLean.file_path("uuid")
     end
   end
 
@@ -101,7 +109,49 @@ module SQLean
   module VSV
     # Returns an absolute path to the SQLean vsv extension.
     def self.sqlite_extension_path
-      File.join(__dir__, "sqlean", "dist", "vsv.so")
+      SQLean.file_path("vsv")
     end
+  end
+
+  #
+  #  "private" methods
+  #
+  def self.file_path(name) # :nodoc:
+    File.join(SQLean.file_dir, "#{name}.#{SQLean.file_ext}")
+  end
+
+  def self.file_dir # :nodoc:
+    @file_arch ||= begin
+      check_arch
+
+      Dir.glob(File.join(__dir__, "sqlean", "dist", "*")).find do |f|
+        Gem::Platform.match_gem?(Gem::Platform.new(File.basename(f)), GEM_NAME)
+      end
+    end
+  end
+
+  def self.check_arch # :nodoc:
+    if SQLean::Upstream::NATIVE_PLATFORMS.keys.none? { |p| Gem::Platform.match_gem?(Gem::Platform.new(p), GEM_NAME) }
+      raise UnsupportedPlatform, "#{GEM_NAME} does not support the #{platform} platform."
+    end
+  end
+
+  def self.file_ext # :nodoc:
+    @file_ext ||=
+      case platform
+      when WINDOWS_PLATFORM_REGEX
+        "dll"
+      when DARWIN_PLATFORM_REGEX
+        "dylib"
+      when LINUX_PLATFORM_REGEX
+        "so"
+      else
+        raise "Unknown or unsupported platform: #{platform}"
+      end
+  end
+
+  # here mostly for testing purposes (to stub)
+  def self.platform # :nodoc:
+    RUBY_PLATFORM
   end
 end

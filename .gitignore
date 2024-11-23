@@ -1,9 +1,10 @@
 /.bundle/
 /.yardoc
 /_yardoc/
+/archive/
 /coverage/
 /doc/
+/lib/sqlean/dist
 /pkg/
 /spec/reports/
 /tmp/
-/lib/sqlean/dist
