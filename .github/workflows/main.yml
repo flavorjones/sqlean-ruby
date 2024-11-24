@@ -72,12 +72,12 @@ jobs:
         ruby: ["3.3"]
         platform:
           - aarch64-linux-gnu
-          - aarch64-linux-musl
+          # - aarch64-linux-musl
           - x86_64-linux-gnu
-          - x86_64-linux-musl
+          # - x86_64-linux-musl
         include:
-          - { platform: x86_64-linux-musl, docker_tag: "-alpine" }
-          - { platform: aarch64-linux-musl, docker_tag: "-alpine", docker_platform: "--platform=linux/arm64" }
+          # - { platform: x86_64-linux-musl, docker_tag: "-alpine" }
+          # - { platform: aarch64-linux-musl, docker_tag: "-alpine", docker_platform: "--platform=linux/arm64" }
           - { platform: aarch64-linux-gnu, docker_platform: "--platform=linux/arm64" }
     steps:
       - uses: actions/checkout@v4
