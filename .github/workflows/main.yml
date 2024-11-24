@@ -47,11 +47,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.3"]
         os:
           - macos-13 # x86_64-darwin
           - macos-14 # arm64-darwin
           - windows-latest # x64-mingw32 and x64-mingw-ucrt
+        ruby: ["3.1", "3.2", "3.3"]
     steps:
       - uses: actions/checkout@v4
       - run: rm -f Gemfile.lock
@@ -69,14 +69,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.3"]
         platform:
           - aarch64-linux-gnu
-          # - aarch64-linux-musl
+          # - aarch64-linux-musl # builds not available yet
           - x86_64-linux-gnu
-          # - x86_64-linux-musl
+          - x86_64-linux-musl
+        ruby: ["3.1", "3.2", "3.3"]
         include:
-          # - { platform: x86_64-linux-musl, docker_tag: "-alpine" }
+          - { platform: x86_64-linux-musl, docker_tag: "-alpine" }
           # - { platform: aarch64-linux-musl, docker_tag: "-alpine", docker_platform: "--platform=linux/arm64" }
           - { platform: aarch64-linux-gnu, docker_platform: "--platform=linux/arm64" }
     steps:
