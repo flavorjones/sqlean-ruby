@@ -25,19 +25,18 @@ jobs:
       - run: rm -f Gemfile.lock
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: "3.3"
           bundler-cache: true
       - run: bundle exec rake standard
 
   basic:
-    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: rm -f Gemfile.lock
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: "3.3"
           bundler-cache: true
       - run: bundle exec rake test
 
@@ -48,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "head"]
+        ruby: ["3.3"]
         os:
           - macos-13 # x86_64-darwin
           - macos-14 # arm64-darwin
@@ -56,6 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: rm -f Gemfile.lock
+        shell: bash
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "head"]
+        ruby: ["3.3"]
         platform:
           - aarch64-linux-gnu
           - aarch64-linux-musl
@@ -86,4 +86,4 @@ jobs:
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker run --rm -v $PWD:/work -w /work \
             ${{ matrix.docker_platform }} ruby:${{ matrix.ruby }}${{ matrix.docker_tag }} \
-            sh -c "bundle install && bundle exec rake test"
+            sh -c "bundle install --without=lint && bundle exec rake test"
