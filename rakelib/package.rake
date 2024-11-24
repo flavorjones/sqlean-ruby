@@ -110,8 +110,10 @@ SQLean::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
   task "unzip" => "unzip:#{platform}"
 end
 
-desc "Download and unzip extensions for the current platform (#{Gem::Platform.local})"
-task "download:local" => "download:#{Gem::Platform.local}"
+GEM_PLATFORM_LOCAL = Gem::Platform.local.then { |p| "#{p.cpu}-#{p.os}" }
+
+desc "Download and unzip extensions for the current platform (#{GEM_PLATFORM_LOCAL})"
+task "download:local" => "download:#{GEM_PLATFORM_LOCAL}"
 
 #
 #  packaging
