@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-require "sqlean"
-
+require_relative "../lib/sqlean"
+require "sqlite3"
 require "minitest/autorun"

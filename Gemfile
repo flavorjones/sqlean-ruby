@@ -5,7 +5,13 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in sqlean.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
-gem "minitest", "~> 5.16"
-gem "standard", "~> 1.3"
-gem "rubyzip"
+group :development do
+  gem "rake"
+  gem "standard"
+  gem "rubyzip"
+end
+
+group :test do
+  gem "minitest"
+  gem "sqlite3"
+end

@@ -89,6 +89,14 @@ module SQLean
     end
   end
 
+  # https://github.com/nalgeon/sqlean/blob/main/docs/time.md
+  module Time
+    # Returns an absolute path to the SQLean text extension.
+    def self.sqlite_extension_path
+      SQLean.file_path("time")
+    end
+  end
+
   # https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md
   module Unicode
     # Returns an absolute path to the SQLean unicode extension.
