@@ -8,9 +8,6 @@ module SQLean
   class UnsupportedPlatform < StandardError; end
 
   GEM_NAME = "sqlean"
-  WINDOWS_PLATFORM_REGEX = /mingw|mswin/ # :nodoc:
-  LINUX_PLATFORM_REGEX = /linux/ # :nodoc:
-  DARWIN_PLATFORM_REGEX = /darwin/ # :nodoc:
 
   # Returns an absolute path to the SQLean bundle, containing all the SQLean extensions.
   def self.sqlite_extension_path
@@ -125,7 +122,7 @@ module SQLean
   #  "private" methods
   #
   def self.file_path(name) # :nodoc:
-    File.join(SQLean.file_dir, "#{name}.#{SQLean.file_ext}")
+    File.join(SQLean.file_dir, name)
   end
 
   def self.file_dir # :nodoc:
@@ -142,20 +139,6 @@ module SQLean
     if SQLean::Upstream::NATIVE_PLATFORMS.keys.none? { |p| Gem::Platform.match_gem?(Gem::Platform.new(p), GEM_NAME) }
       raise UnsupportedPlatform, "#{GEM_NAME} does not support the #{platform} platform."
     end
-  end
-
-  def self.file_ext # :nodoc:
-    @file_ext ||=
-      case platform
-      when WINDOWS_PLATFORM_REGEX
-        "dll"
-      when DARWIN_PLATFORM_REGEX
-        "dylib"
-      when LINUX_PLATFORM_REGEX
-        "so"
-      else
-        raise "Unknown or unsupported platform: #{platform}"
-      end
   end
 
   # here mostly for testing purposes (to stub)
