@@ -26,13 +26,18 @@
 #
 #  So the full set of gem files created will be:
 #
-#  - pkg/sqlean-1.0.0-aarch64-linux.gem
+#  - pkg/sqlean-1.0.0-x86_64-linux-gnu.gem
+#  - pkg/sqlean-1.0.0-x86_64-linux-musl.gem
+#  - pkg/sqlean-1.0.0-aarch64-linux-gnu.gem
 #  - pkg/sqlean-1.0.0-arm64-darwin.gem
-#  - pkg/sqlean-1.0.0-x64-mingw.gem
 #  - pkg/sqlean-1.0.0-x86_64-darwin.gem
-#  - pkg/sqlean-1.0.0-x86_64-linux.gem
+#  - pkg/sqlean-1.0.0-x64-mingw.gem
 #
-#  Note that we do not ship a vanilla "ruby" gem.
+#  Note that we do not ship a vanilla "ruby" gem, or an aarch64-linux gem, or a mingw32 gem.
+#
+#  Note that upstream does not provide musl builds, but I did build the x86_64-linux-musl version
+#  and checked it into the builds/ directory. However, I'm too lazy right now to build an
+#  aarch64-linux-musl version.
 #
 #
 #  New rake tasks created:
@@ -77,14 +82,20 @@ task "download" => "unzip"
 SQLean::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
   release_url = sqlean_download_url(filename)
   zip_path = File.join(archive, "sqlean-#{filename}.zip")
+  build_path = File.join("builds", "sqlean-#{filename}.zip")
 
   install_path = File.join(dist, platform)
   directory install_path
 
   file zip_path => archive do
-    warn "Downloading #{zip_path} from #{release_url} ..."
-    OpenURI.open_uri(release_url) do |remote|
-      File.binwrite(zip_path, remote.read)
+    if File.exist?(build_path)
+      warn "Using prebuilt #{build_path} ..."
+      FileUtils.cp(build_path, zip_path)
+    else
+      warn "Downloading #{zip_path} from #{release_url} ..."
+      OpenURI.open_uri(release_url) do |remote|
+        File.binwrite(zip_path, remote.read)
+      end
     end
   end
 
@@ -110,7 +121,12 @@ SQLean::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
   task "unzip" => "unzip:#{platform}"
 end
 
-GEM_PLATFORM_LOCAL = Gem::Platform.local.then { |p| "#{p.cpu}-#{p.os}" }
+GEM_PLATFORM_LOCAL = Gem::Platform.local.then do |p|
+  version = if p.os == "linux"
+    p.version || "gnu"
+  end
+  [p.cpu, p.os, version].compact.join("-")
+end
 
 desc "Download and unzip extensions for the current platform (#{GEM_PLATFORM_LOCAL})"
 task "download:local" => "download:#{GEM_PLATFORM_LOCAL}"

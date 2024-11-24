@@ -6,8 +6,9 @@ module SQLean
 
     # rubygems platform name => upstream release filename fragment
     NATIVE_PLATFORMS = {
-      "aarch64-linux" => "linux-arm64",
-      "x86_64-linux" => "linux-x86",
+      "aarch64-linux-gnu" => "linux-arm64",
+      "x86_64-linux-gnu" => "linux-x86",
+      "x86_64-linux-musl" => "linux-x86-musl",
 
       "arm64-darwin" => "macos-arm64",
       "x86_64-darwin" => "macos-x86",

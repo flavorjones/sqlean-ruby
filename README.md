@@ -92,6 +92,25 @@ If bundler is not being used to manage dependencies, install the gem by executin
 gem install sqlean
 ```
 
+Note that right now, the only platforms supported are:
+
+- MacOS / Darwin:
+  - x86_64
+  - arm64
+- Linux
+  - x86_64 gnu
+  - x86_64 musl
+  - aarch64 gnu
+- Windows
+  - mingw (64-bit)
+
+Specifically what's missing is support for:
+
+- Linux aarch64 musl
+- Windows mingw32 (32-bit)
+
+If you need support for one of these platforms, please open an issue. I would also gladly welcome folks who are willing to help add support.
+
 
 ## Development
 
