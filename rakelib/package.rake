@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 #  Rake tasks to manage native gem packages with precompiled extensions from https://github.com/nalgeon/sqlean
 #
@@ -91,7 +93,7 @@ SQLean::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
       warn "Unzipping #{zip_path} ..."
       zip.each do |file|
         new_path = File.join(install_path, file.name)
-        puts "extracting: #{file.name.inspect} → #{new_path.inspect} ..."
+        # puts "extracting: #{file.name.inspect} → #{new_path.inspect} ..."
 
         FileUtils.rm(new_path) if File.exist?(new_path)
 
@@ -101,12 +103,15 @@ SQLean::Upstream::NATIVE_PLATFORMS.each do |platform, filename|
     end
   end
 
-  desc "download and unzip extensions for #{platform}"
+  desc "Download and unzip extensions for #{platform}"
   task "download:#{platform}" => "unzip:#{platform}"
 
   task "download" => "download:#{platform}"
   task "unzip" => "unzip:#{platform}"
 end
+
+desc "Download and unzip extensions for the current platform (#{Gem::Platform.local})"
+task "download:local" => "download:#{Gem::Platform.local}"
 
 #
 #  packaging
