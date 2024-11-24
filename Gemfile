@@ -7,8 +7,11 @@ gemspec
 
 group :development do
   gem "rake"
-  gem "standard"
   gem "rubyzip"
+end
+
+group :lint do
+  gem "standard"
 end
 
 group :test do
