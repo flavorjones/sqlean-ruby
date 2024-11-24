@@ -32,16 +32,22 @@ require "sqlite3"
 require "sqlean"
 
 db = SQLite3::Database.new("path/to/db.sqlite")
+db.enable_load_extension(true)
 
-# when using sqlite3 gem < 2.4.0:
-db.load_extension(SQLean.extension_path) # load every extension in SQLean
-db.load_extension(SQLean::Crypto.extension_path) # or load individual extensions
+db.load_extension(SQLean.sqlite_extension_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.sqlite_extension_path) # or load individual extensions
+```
 
-# when using sqlite3 gem >= 2.4.0, this form is also available:
+<!-- not available yet!
+or, if using sqlite3 gem >= 2.4.0:
+
+```
 db.load_extension(SQLean) # load every extension in SQLean
 db.load_extension(SQLean::Crypto) # or load individual extensions
 ```
+-->
 
+<!-- also not available yet!
 ### with SQLite3 in Rails
 
 When using SQLite3 v2.4.0+ and Rails 8.1.0+:
@@ -55,7 +61,7 @@ development:
     - SQLean # load every extension in SQLean
     - SQLean::Crypto # or load individual extensions
 ```
-
+-->
 
 ### with Extralite
 
@@ -67,8 +73,8 @@ require "sqlean"
 
 db = Extralite::Database.new("path/to/db.sqlite")
 
-db.load_extension(SQLean.extension_path) # load every extension in SQLean
-db.load_extension(SQLean::Crypto.extension_path) # or load individual extensions
+db.load_extension(SQLean.sqlite_extension_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.sqlite_extension_path) # or load individual extensions
 ```
 
 
