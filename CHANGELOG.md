@@ -1,5 +1,11 @@
-## [Unreleased]
+# SQLean for Ruby Changelog
 
-## [0.1.0] - 2024-11-23
+## v0.2.0 / 2024-11-24
 
-- Initial release
+- Support for x86_64-linux-musl with self-built extensions.
+- Explicitly state no-support for aarch64-linux-musl.
+
+
+## v0.1.0 / 2024-11-24
+
+- Initial experimental release

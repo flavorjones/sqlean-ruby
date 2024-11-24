@@ -2,6 +2,7 @@
 
 module SQLean
   module Upstream
+    # The version of upstream sqlean extensions used.
     VERSION = "0.27.1"
 
     # rubygems platform name => upstream release filename fragment
