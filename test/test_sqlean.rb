@@ -134,7 +134,11 @@ class TestSQLean < Minitest::Spec
   let(:db) do
     SQLite3::Database.new(":memory:").tap do |db|
       db.enable_load_extension(true)
-      db.load_extension(extension.sqlite_extension_path)
+      if SQLite3::VERSION < "2.4" || rand(2).zero? # cover both paths
+        db.load_extension(extension.to_path)
+      else
+        db.load_extension(extension)
+      end
     end
   end
 
