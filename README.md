@@ -34,8 +34,8 @@ require "sqlean"
 db = SQLite3::Database.new("path/to/db.sqlite")
 db.enable_load_extension(true)
 
-db.load_extension(SQLean.sqlite_extension_path) # load every extension in SQLean
-db.load_extension(SQLean::Crypto.sqlite_extension_path) # or load individual extensions
+db.load_extension(SQLean.to_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.to_path) # or load individual extensions
 ```
 
 <!-- not available yet!
@@ -73,8 +73,8 @@ require "sqlean"
 
 db = Extralite::Database.new("path/to/db.sqlite")
 
-db.load_extension(SQLean.sqlite_extension_path) # load every extension in SQLean
-db.load_extension(SQLean::Crypto.sqlite_extension_path) # or load individual extensions
+db.load_extension(SQLean.to_path) # load every extension in SQLean
+db.load_extension(SQLean::Crypto.to_path) # or load individual extensions
 ```
 
 
